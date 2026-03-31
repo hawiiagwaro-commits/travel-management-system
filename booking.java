@@ -30,4 +30,12 @@ public class Booking implements Payable {
         System.out.println("Days: " + travelPackage.getDays());
         System.out.println("Total Price: " + travelPackage.calculatePrice());
     }
+
+    public String toString() {
+        return bookingId + "," +
+            customer.getName() + "," +
+            travelPackage.getDestination() + "," +
+            travelPackage.getDays() + "," +
+            travelPackage.calculatePrice();
+    }
 }

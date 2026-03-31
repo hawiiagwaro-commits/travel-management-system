@@ -1,9 +1,11 @@
-import java.util.Scanner;
+import java.util.*;
+import java.io.*;
 
 public class Main {
     public static void main(String[] args) {
 
         Scanner input = new Scanner(System.in);
+        ArrayList<Booking> bookings = new ArrayList<>();
 
         try {
 
@@ -17,18 +19,6 @@ public class Main {
             String passport = input.nextLine();
 
             Customer c1 = new Customer(name, email, passport);
-
-            System.out.print("Employee name: ");
-            String ename = input.nextLine();
-
-            System.out.print("Employee email: ");
-            String eemail = input.nextLine();
-
-            System.out.print("Salary: ");
-            double sal = input.nextDouble();
-            input.nextLine();
-
-            Employee e1 = new Employee(ename, eemail, sal);
 
             System.out.print("Package ID: ");
             String id = input.nextLine();
@@ -47,27 +37,42 @@ public class Main {
 
             Booking b1 = new Booking("B01", c1, tp);
 
-            System.out.println("\n--- Booking Info ---");
-            c1.displayRole();
-            e1.displayRole();
-            b1.displayBooking();
+            // Add to collection
+            bookings.add(b1);
 
-            System.out.print("\nEnter discount % (0 if none): ");
-            double discount = input.nextDouble();
+            System.out.println("\n--- All Bookings ---");
+            for (Booking b : bookings) {
+                b.displayBooking();
+            }
 
-            double finalPrice = tp.applyDiscount(discount);
-            System.out.println("Price after discount: " + finalPrice);
+            // Save to file
+            BufferedWriter writer = new BufferedWriter(new FileWriter("bookings.txt"));
 
-            System.out.print("Enter payment: ");
-            double pay = input.nextDouble();
+            for (Booking b : bookings) {
+                writer.write(b.toString());
+                writer.newLine();
+            }
 
-            b1.processPayment(pay);
+            writer.close();
+            System.out.println("Bookings saved to file.");
+
+            // Read from file
+            BufferedReader reader = new BufferedReader(new FileReader("bookings.txt"));
+
+            String line;
+            System.out.println("\n--- Reading from file ---");
+
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+
+            reader.close();
 
         } catch (Exception e) {
-            System.out.println("Error: wrong input type.");
+            System.out.println("Error occurred.");
         } finally {
-            System.out.println("Program finished.");
             input.close();
+            System.out.println("Program finished.");
         }
     }
 }
